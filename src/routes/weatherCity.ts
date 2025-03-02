@@ -24,11 +24,11 @@ router.get('/weather', async (req: Request, res: Response) => {
         res.json(result)
       }
       else {
-        res.send("Không tìm thấy thành phố")
+        res.status(400).send("Không tìm thấy thành phố")
       }
     }
     else {
-      res.send("Giá trị nhập vào không phải là một chuỗi")
+      res.status(404).send("Giá trị nhập vào không phải là một chuỗi")
     }
   })
   
