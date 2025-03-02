@@ -11,20 +11,26 @@ router.get('/weather', async (req: Request, res: Response) => {
     //Nếu sử dụng code của js ban đầu thì TS sẽ báo lỗi vì không rõ kiểu dữ liệu của "city" là gì
     //req.query.city có thể nhận các giá trị chuỗi, object, mảng,...
     if(typeof city === "string"){
-      const response = await fetch('https://vnexpress.net/microservice/weather')
-      const data  = await response.json()
-      const cityWeather = data[city]
-      if(data[city]) {
-        const result : CityWeather = {
-          temperature : cityWeather.temperature,
-          temperature_max : cityWeather.temperature_max,
-          temperature_min : cityWeather.temperature_min,
-          phrase : cityWeather.phrase
-        }
-        res.json(result)
-      }
-      else {
-        res.status(400).send("Không tìm thấy thành phố")
+      try {
+          const response = await fetch('https://vnexpress.net/microservice/weather')
+          const data  = await response.json()
+          const cityWeather = data[city]
+          if(data[city]) {
+            const result : CityWeather = {
+              temperature : cityWeather.temperature,
+              temperature_max : cityWeather.temperature_max,
+              temperature_min : cityWeather.temperature_min,
+              phrase : cityWeather.phrase
+            }
+            res.json(result)
+          } 
+          else {
+            res.status(400).send("Không tìm thấy thành phố")
+          }
+          }
+      catch (error) {
+        console.error(error)
+        res.status(500).send("Đã xảy ra lỗi khi lấy dữ liệu thời tiết")
       }
     }
     else {
